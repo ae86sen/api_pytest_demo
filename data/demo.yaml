@@ -1,0 +1,33 @@
+audit:
+  - title: '确认审核通过成功'
+    add_loan_json: &addloanjson
+      member_id: $member_id
+      title: '拯救银河系'
+      amount: 50000
+      loan_rate: 10.0
+      loan_term: 6
+      loan_date_type: 1
+      bidding_days: 10
+    audit_json:
+      approved_or_not: True
+    expected: {"code":0,"msg":"OK","status":2}
+    sql: 'SELECT status FROM  futureloan.loan WHERE id=$loan_id;'
+
+invest:
+  - title: '确认投资成功'
+    add_loan_json:
+      <<: *addloanjson
+#      member_id: $member_id
+#      title: '拯救银河系'
+#      amount: 50000
+#      loan_rate: 10.0
+#      loan_term: 6
+#      loan_date_type: 1
+#      bidding_days: 10
+    audit_json:
+      approved_or_not: True
+    invest_json:
+      member_id: $invest_member_id
+      loan_id: $loan_id
+      amount: 100
+    expected: {"code":0,"msg":"OK"}

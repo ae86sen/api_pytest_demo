@@ -1,0 +1,32 @@
+env:
+  host: 'http://api.lemonban.com/futureloan'
+
+request_headers:
+  headers: { "X-Lemonban-Media-Type": "lemonban.v2" }
+
+account:
+  user: '15882345570'
+  pwd: 'admin123'
+
+investor_account:
+  user: '13980841494'
+  pwd: 'admin123'
+
+mysql:
+  host: 'api.lemonban.com'
+  user: 'future'
+  password: '123456'
+  port: 3306
+
+member_api:
+  login: '/member/login'
+  register: '/member/register'
+  recharge: '/member/recharge'
+  withdraw: '/member/withdraw'
+  update: '/member/update'
+  invest: '/member/invest'
+
+loan_api:
+  add: '/loan/add'
+  audit: '/loan/audit'
+  loan_list: '/loans'

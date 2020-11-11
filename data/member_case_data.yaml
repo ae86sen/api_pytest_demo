@@ -1,0 +1,221 @@
+login:
+  - title: '确认输入正确账号密码登录成功'
+    account:
+      user: '15882345570'
+      pwd: 'admin123'
+    expected: {"code": 0,"msg": "OK"}
+
+  - 'title': '验证手机号为空登录失败'
+    account:
+      'user': ''
+      'pwd': 'admin123'
+    'expected': {"code": 1,"msg": "手机号码为空"}
+
+  - 'title': '验证密码为空登录失败'
+    account:
+      'user': '15882345570'
+      'pwd': ''
+    'expected': {"code": 1,"msg": "密码为空"}
+
+  - 'title': '验证手机号未注册登录失败'
+    'account':
+      'user': '15880000000'
+      'pwd': 'admin123'
+    'expected': {"code": 1001,"msg": "账号信息错误"}
+
+  - 'title': '验证密码错误登录失败'
+    'account':
+      'user': '15882345570'
+      'pwd': '123123'
+    'expected': {"code": 1001,"msg": "账号信息错误"}
+
+  - 'title': '验证手机号格式错误登录失败'
+    'account':
+      'user': '12345678910'
+      'pwd': '123123'
+    'expected': {"code": 2,"msg": "无效的手机格式"}
+
+register:
+  - title: '确认带注册名注册成功'
+    account:
+      mobile_phone: '$mobile_phone'
+      pwd: 'admin123'
+      member_type: '1'
+      reg_name: '派大星'
+    expected: {"code": 0,"msg": "OK"}
+
+  - title: '确认不带注册名注册成功'
+    account:
+      mobile_phone: '$mobile_phone'
+      pwd: 'admin123'
+      member_type: '1'
+    expected: {"code": 0,"msg": "OK"}
+
+  - title: '验证不输入手机号注册失败'
+    account:
+      mobile_phone: ''
+      pwd: 'admin123'
+      member_type: '1'
+    expected: {"code": 1,"msg": "手机号为空"}
+
+  - title: '验证手机号长度为10位注册失败'
+    account:
+      mobile_phone: '1351514174'
+      pwd: 'admin123'
+      member_type: '1'
+    expected: {"code": 2,"msg": "无效的手机格式"}
+
+  - title: '验证手机号长度为12位注册失败'
+    account:
+      mobile_phone: '135151417444'
+      pwd: 'admin123'
+      member_type: '1'
+    expected: {"code": 2,"msg": "无效的手机格式"}
+
+  - title: '验证使用已注册手机号注册失败'
+    account:
+      mobile_phone: '15882345570'
+      pwd: 'admin123'
+      member_type: '1'
+    expected: {"code": 2,"msg": "账号已存在"}
+
+  - title: '验证密码为7位注册失败'
+    account:
+      mobile_phone: '$mobile_phone'
+      pwd: 'admin12'
+      member_type: '1'
+    expected: {"code": 2,"msg": "密码格式为8到16位"}
+
+  - title: '验证不输入密码注册失败'
+    account:
+      mobile_phone: '$mobile_phone'
+      pwd: ''
+      member_type: '1'
+    expected: {"code": 1,"msg": "密码为空"}
+
+  - title: '验证注册名11位注册失败'
+    account:
+      mobile_phone: '$mobile_phone'
+      pwd: 'admin123'
+      member_type: '1'
+      reg_name: '12345678901'
+    expected: {"code": 2,"msg": "用户昵称长度超过10位"}
+
+  - title: '验证type类型为2注册失败'
+    account:
+      mobile_phone: '$mobile_phone'
+      pwd: 'admin123'
+      member_type: '2'
+    expected: {"code": 2,"msg": "不支持的用户类型"}
+
+  - title: '验证不输入类型注册失败'
+    account:
+      mobile_phone: '$mobile_phone'
+      pwd: 'admin123'
+      member_type: ''
+    expected: {"code": 0,"msg": "OK"}
+
+recharge:
+  - 'title': '验证充值金额为整数充值成功'
+    'member_id': '$member_id'
+    'amount': 600
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证充值金额为1位小数充值成功'
+    'member_id': '$member_id'
+    'amount': 600.1
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证充值金额为2位小数充值成功'
+    'member_id': '$member_id'
+    'amount': 600.22
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证充值金额为50万充值成功'
+    'member_id': '$member_id'
+    'amount': 500000
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证会员id为空充值失败'
+    'member_id': ''
+    'amount': 600
+    'expected': {"code": 1,"msg": "用户id为空"}
+    'sql': ''
+
+  - 'title': '验证会员id不是当前登录的用户充值失败'
+    'member_id': '98999888'
+    'amount': 600
+    'expected': {"code": 1007,"msg": "无权限访问，请检查参数"}
+    'sql': ''
+
+  - 'title': '验证充值金额为0充值失败'
+    'member_id': '$member_id'
+    'amount': 0
+    'expected': {"code": 2,"msg": "余额必须大于0并且小于或者等于500000"}
+    'sql': ''
+
+  - 'title': '验证会员id为字符串充值失败'
+    'member_id': 'abcde'
+    'amount': 600
+    'expected': {"code": 2,"msg": "数字格式化异常"}
+    'sql': ''
+
+  - 'title': '验证充值金额为负数充值失败'
+    'member_id': '$member_id'
+    'amount': -600
+    'expected': {"code": 2,"msg": "余额必须大于0并且小于或者等于500000"}
+    'sql': ''
+
+  - 'title': '验证充值金额大于50万充值失败'
+    'member_id': '$member_id'
+    'amount': 1000000
+    'expected': {"code": 2,"msg": "余额必须大于0并且小于或者等于500000"}
+    'sql': ''
+
+
+withdraw:
+  - 'title': '验证提现金额为整数提现成功'
+    'member_id': '$member_id'
+    'amount': 600
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证提现金额为1位小数提现成功'
+    'member_id': '$member_id'
+    'amount': 600.1
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证提现金额为2位小数提现成功'
+    'member_id': '$member_id'
+    'amount': 600.22
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证提现金额为50万提现成功'
+    'member_id': '$member_id'
+    'amount': 500000.1
+    'expected': {"code": 0,"msg": "OK"}
+    'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
+
+  - 'title': '验证会员id为空提现失败'
+    'member_id': ''
+    'amount': 600
+    'expected': {"code": 1,"msg": "用户id为空"}
+    'sql': ''
+
+  - 'title': '验证提现金额为空提现失败'
+    'member_id': '$member_id'
+    'amount': 600
+    'expected': {"code": 1,"msg": "余额为空"}
+    'sql': ''
+
+  - 'title': '验证提现金额为3位小数提现失败'
+    'member_id': '$member_id'
+    'amount': 600.333
+    'expected': {"code": 2,"msg": "余额小数超过两位"}
+    'sql': ''
