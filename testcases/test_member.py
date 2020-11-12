@@ -7,7 +7,7 @@ from loguru import logger
 
 # from api_member.member_api import MemberApi
 from common.handle_assert import HandleAssert as HA
-from common.handle_path import CONFIG_DIR, DATA_DIR
+from common.handle_path import DATA_DIR
 from case_member.member_case import MemberCase
 
 case_data_path = os.path.join(DATA_DIR, 'member_case_data.yaml')
@@ -16,7 +16,7 @@ datas = yaml.safe_load(open(case_data_path, encoding='utf-8'))
 
 @allure.feature('人员')
 class TestMember(MemberCase):
-    conf_data = MemberCase().get_yaml(CONFIG_DIR)
+    conf_mysql = MemberCase().mysql_conf
 
     @pytest.mark.zls
     @allure.story('登录')
@@ -39,7 +39,7 @@ class TestMember(MemberCase):
 
     @allure.story('充值')
     @allure.title('{data[title]}')
-    @pytest.mark.parametrize('connect_mysql', [conf_data['mysql']], indirect=True)
+    @pytest.mark.parametrize('connect_mysql', [conf_mysql], indirect=True)
     @pytest.mark.parametrize('data', datas['recharge'])
     def test_recharge(self, data, get_login_data, connect_mysql):
         login_data = get_login_data
@@ -53,7 +53,7 @@ class TestMember(MemberCase):
 
     @allure.story('提现')
     @allure.title('{data[title]}')
-    @pytest.mark.parametrize('connect_mysql', [conf_data['mysql']], indirect=True)
+    @pytest.mark.parametrize('connect_mysql', [conf_mysql], indirect=True)
     @pytest.mark.parametrize('data', datas['withdraw'])
     def test_withdraw(self, data, get_login_data, connect_mysql):
         login_data = get_login_data

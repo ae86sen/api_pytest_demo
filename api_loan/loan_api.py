@@ -13,13 +13,14 @@ from jsonpath import jsonpath
 from common.base_api import BaseApi
 from common.handle_path import CONF_DIR
 
-conf_path = os.path.join(CONF_DIR, 'config.yaml')
+
+# conf_path = os.path.join(CONF_DIR, 'config.yaml')
 
 
 class LoanApi(BaseApi):
-    __conf_data = BaseApi().get_yaml(conf_path)
-    __host = __conf_data['env']['host']
-    __headers = __conf_data['request_headers']['headers']
+    # conf_data = BaseApi().get_yaml(conf_path)
+    # host = conf_data['env']['host']
+    # headers = conf_data['request_headers']['headers']
 
     @allure.step('调用添加项目接口')
     def add_loan_api(self, member_id: int, title, amount, loan_rate, loan_term: int,
@@ -36,11 +37,11 @@ class LoanApi(BaseApi):
         :param token:
         :return:
         """
-        api = self.__conf_data['loan_api']['add']
+        api = self.conf_data['loan_api']['add']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'post',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'member_id': member_id,
                 'title': title,
@@ -51,7 +52,8 @@ class LoanApi(BaseApi):
                 'bidding_days': bidding_days
             }
         }
-        data['headers'].update({'Authorization': token})
+        # data['headers'].update({'Authorization': token})
+        self.headers['Authorization'] = token
         response = self.send_http(data)
         return response
 
@@ -62,11 +64,11 @@ class LoanApi(BaseApi):
         :param approval_result: 审核结果，True-通过，False-不通过
         :return:
         """
-        api = self.__conf_data['loan_api']['audit']
+        api = self.conf_data['loan_api']['audit']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'patch',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'loan_id': loan_id,
                 'approved_or_not': approval_result
@@ -77,27 +79,28 @@ class LoanApi(BaseApi):
 
     @allure.step('step:调用投资api')
     def invest_loan_api(self, member_id, loan_id, amount, token):
-        api = self.__conf_data['member_api']['invest']
+        api = self.conf_data['member_api']['invest']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'post',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'member_id': member_id,
                 'loan_id': loan_id,
                 'amount': amount
             }
         }
-        data['headers'].update({'Authorization': token})
+        # data['headers'].update({'Authorization': token})
+        self.headers['Authorization'] = token
         response = self.send_http(data)
         return response
 
     def loan_list_api(self):
-        api = self.__conf_data['loan_api']['loan_list']
+        api = self.conf_data['loan_api']['loan_list']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'get',
-            'headers': self.__headers,
+            'headers': self.headers,
             'params': {
                 'pageIndex': 1,
                 'pageSize': 10
@@ -107,14 +110,4 @@ class LoanApi(BaseApi):
         return response
 
 
-if __name__ == '__main__':
-    from api_member.member_api import MemberApi
 
-    d = LoanApi()
-
-    # c = MemberApi()
-    # x = c.get_login_data()
-    # print(x)
-    # token = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJfaWQiOjIwMjc0NCwiZXhwIjoxNjA1MDE3MjE4fQ.9SF8993EW85ql4sBMU9SCUX2AXU8RpUCatOCcUvhrHQaGdHhf_BH_I7RHg3AJp-AkxqKw_A9ipx-mWiGnzXbCw'
-    # print(d.add_loan_api(x['member_id'], '拯救银河系', 50000, 10.0, 6, 1, 8, x['token']).json())
-    print(d.loan_list_api().json())

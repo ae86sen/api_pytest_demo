@@ -1,39 +1,39 @@
 add_loan:
-#  - title: '确认添加贷款项目成功'
-#    json:
-#      member_id: $member_id
-#      title: '拯救银河系'
-#      amount: 50000
-#      loan_rate: 10.0
-#      loan_term: 6
-#      loan_date_type: 1
-#      bidding_days: 10
-#    expected: {"code":0,"msg":"OK"}
-#    sql: "SELECT * FROM  futureloan.loan WHERE member_id=$member_id;"
+  - title: '确认添加贷款项目成功'
+    json:
+      member_id: $member_id
+      title: '拯救银河系'
+      amount: 50000
+      loan_rate: 10.0
+      loan_term: 6
+      loan_date_type: 1
+      bidding_days: 10
+    expected: {"code":0,"msg":"OK"}
+    sql: "SELECT * FROM  futureloan.loan WHERE member_id=$member_id;"
 
-#  - title: '验证借款人id为空加标失败'
-#    json:
-#      member_id: ''
-#      title: '拯救银河系'
-#      amount: 50000
-#      loan_rate: 10.0
-#      loan_term: 6
-#      loan_date_type: 1
-#      bidding_days: 10
-#    expected: {"code":1,"msg":"用户id为空"}
-#    sql: ''
+  - title: '验证借款人id为空加标失败'
+    json:
+      member_id: ''
+      title: '拯救银河系'
+      amount: 50000
+      loan_rate: 10.0
+      loan_term: 6
+      loan_date_type: 1
+      bidding_days: 10
+    expected: {"code":1,"msg":"用户id为空"}
+    sql: ''
 
-#  - title: '验证标题为空加标失败'
-#    json:
-#      member_id: $member_id
-#      title: ''
-#      amount: 50000
-#      loan_rate: 10.0
-#      loan_term: 6
-#      loan_date_type: 1
-#      bidding_days: 10
-#    expected: { "code": 1,"msg": "标题为空" }
-#    sql: ''
+  - title: '验证标题为空加标失败'
+    json:
+      member_id: $member_id
+      title: ''
+      amount: 50000
+      loan_rate: 10.0
+      loan_term: 6
+      loan_date_type: 1
+      bidding_days: 10
+    expected: { "code": 1,"msg": "标题为空" }
+    sql: ''
 
   - title: '验证借款金额为空加标失败'
     json:
@@ -47,17 +47,17 @@ add_loan:
     expected: { "code": 1,"msg": "借款金额为空" }
     sql: ''
 
-#  - title: '验证借款金额为负数加标失败'
-#    json:
-#      member_id: $member_id
-#      title: '拯救银河系'
-#      amount: -50000
-#      loan_rate: 10.0
-#      loan_term: 6
-#      loan_date_type: 1
-#      bidding_days: 10
-#    expected: { "code": 2,"msg": "借款金额范围错误" }
-#    sql: ''
+  - title: '验证借款金额为负数加标失败'
+    json:
+      member_id: $member_id
+      title: '拯救银河系'
+      amount: -50000
+      loan_rate: 10.0
+      loan_term: 6
+      loan_date_type: 1
+      bidding_days: 10
+    expected: { "code": 2,"msg": "借款金额范围错误" }
+    sql: ''
 
 audit:
   - title: '确认审核通过成功'

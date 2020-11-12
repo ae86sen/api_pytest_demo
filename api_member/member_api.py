@@ -13,26 +13,24 @@ from jsonpath import jsonpath
 from common.base_api import BaseApi
 from common.handle_path import CONF_DIR
 
-conf_path = os.path.join(CONF_DIR, 'config.yaml')
+# conf_path = os.path.join(CONF_DIR, 'config.yaml')
 
 
 class MemberApi(BaseApi):
-    conf_data = BaseApi().get_yaml(conf_path)
-    __host = conf_data['env']['host']
-    __headers = conf_data['request_headers']['headers']
+    # conf_data = BaseApi().get_yaml(conf_path)
+    # host = conf_data['env']['host']
+    # headers = conf_data['request_headers']['headers']
 
-    def login_api(self, user=conf_data['account']['user'], pwd=conf_data['account']['pwd']):
+    def login_api(self, user=BaseApi().account['user'], pwd=BaseApi().account['pwd']):
         """
         登录接口
         :return:
         """
         api = self.conf_data['member_api']['login']
-        # user = self.__conf_data['account']['user']
-        # pwd = self.__conf_data['account']['pwd']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'post',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'mobile_phone': user,
                 'pwd': pwd
@@ -42,7 +40,7 @@ class MemberApi(BaseApi):
         return response
 
     @allure.step('step:调用获取登录结果api')
-    def get_login_data(self, user=conf_data['account']['user'], pwd=conf_data['account']['pwd']):
+    def get_login_data(self, user=BaseApi().account['user'], pwd=BaseApi().account['pwd']):
         """
         提取处理登录响应数据，包括id、leave_amount、mobile_phone、reg_name
 
@@ -64,13 +62,14 @@ class MemberApi(BaseApi):
         :param mobile_phone: 手机号
         :param pwd: 密码
         :param member_type: 0-管理员，1-普通会员，不传默认为1
+        :param reg_name:注册名
         :return:
         """
         api = self.conf_data['member_api']['register']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'post',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'mobile_phone': mobile_phone,
                 'pwd': pwd,
@@ -93,9 +92,9 @@ class MemberApi(BaseApi):
         """
         api = self.conf_data['member_api']['recharge']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'post',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'member_id': member_id,
                 'amount': amount
@@ -115,15 +114,16 @@ class MemberApi(BaseApi):
         """
         api = self.conf_data['member_api']['withdraw']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'post',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'member_id': member_id,
                 'amount': amount
             }
         }
-        data['headers'].update({'Authorization': token})
+        # data['headers'].update({'Authorization': token})
+        self.headers['Authorization'] = token
         response = self.send_http(data)
         return response
 
@@ -137,15 +137,16 @@ class MemberApi(BaseApi):
         """
         api = self.conf_data['member_api']['update']
         data = {
-            'url': self.__host + api,
+            'url': self.host + api,
             'method': 'patch',
-            'headers': self.__headers,
+            'headers': self.headers,
             'json': {
                 'member_id': member_id,
                 'reg_name': reg_name
             }
         }
-        data['headers'].update({'Authorization': token})
+        # data['headers'].update({'Authorization': token})
+        self.headers['Authorization'] = token
         response = self.send_http(data)
         return response
 
@@ -157,11 +158,12 @@ class MemberApi(BaseApi):
         :return:
         """
         data = {
-            'url': self.__host + f'/member/{member_id}/info',
+            'url': self.host + f'/member/{member_id}/info',
             'method': 'get',
-            'headers': self.__headers,
+            'headers': self.headers,
         }
-        data['headers'].update({'Authorization': token})
+        # data['headers'].update({'Authorization': token})
+        self.headers['Authorization'] = token
         response = self.send_http(data)
         return response
 

@@ -5,15 +5,26 @@ Time:2020/10/28
 E-mail:369799130@qq.com
 ============================
 """
+import os
+
 import allure
 import requests
 from jsonpath import jsonpath
 from loguru import logger
 
+from common.handle_path import CONF_DIR
 from common.utils import Utils
 
 
 class BaseApi:
+    conf_path = os.path.join(CONF_DIR, 'config.yaml')
+    conf_data = Utils().handle_yaml(conf_path)
+    host = conf_data['env']['host']
+    headers = conf_data['request_headers']['headers']
+    account = conf_data['account']
+    investor_account = conf_data['investor_account']
+    mysql_conf = conf_data['mysql']
+
     @staticmethod
     def send_http(data):
         try:

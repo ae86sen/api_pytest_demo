@@ -11,7 +11,7 @@ import pytest
 import yaml
 from loguru import logger
 from common.handle_assert import HandleAssert as HA
-from common.handle_path import CONFIG_DIR, DATA_DIR
+from common.handle_path import DATA_DIR
 from case_loan.loan_case import LoanCase
 
 case_data_path = os.path.join(DATA_DIR, 'loan_case_data.yaml')
@@ -20,12 +20,12 @@ datas = yaml.safe_load(open(case_data_path, encoding='utf-8'))
 
 @allure.feature('项目')
 class TestLoan(LoanCase):
-    conf_data = LoanCase().get_yaml(CONFIG_DIR)
+    conf_mysql = LoanCase().mysql_conf
 
     @allure.story('添加项目')
     @allure.title('{data[title]}')
     @pytest.mark.zls
-    @pytest.mark.parametrize('connect_mysql', [conf_data['mysql']], indirect=True)
+    @pytest.mark.parametrize('connect_mysql', [conf_mysql], indirect=True)
     @pytest.mark.parametrize('data', datas['add_loan'])
     def test_add_loan(self, data, get_login_data, connect_mysql):
         login_data = get_login_data
@@ -40,7 +40,7 @@ class TestLoan(LoanCase):
     @allure.story('审核项目')
     @allure.title('{data[title]}')
     # @pytest.mark.zls
-    @pytest.mark.parametrize('connect_mysql', [conf_data['mysql']], indirect=True)
+    @pytest.mark.parametrize('connect_mysql', [conf_mysql], indirect=True)
     @pytest.mark.parametrize('data', datas['audit'])
     def test_audit(self, data, get_login_data, connect_mysql):
 
@@ -55,7 +55,7 @@ class TestLoan(LoanCase):
 
     @allure.story('投资项目')
     @allure.title('{data[title]}')
-    @pytest.mark.parametrize('connect_mysql', [conf_data['mysql']], indirect=True)
+    @pytest.mark.parametrize('connect_mysql', [conf_mysql], indirect=True)
     @pytest.mark.parametrize('data', datas['invest'])
     def test_invest(self, data, get_login_data, connect_mysql):
 
