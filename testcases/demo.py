@@ -1,15 +1,11 @@
-import requests
+from common.wrapper import log_info
 
-url = "http://api.lemonban.com/futureloan/loan/add"
 
-payload = {"member_id": 202744, "title": "拯救银河系", "amount": 500000, "loan_rate": 10.0, "loan_term": 6,
-           "loan_date_type": 1, "bidding_days": 10}
-headers = {
-    'Content-Type': 'application/json',
-    'X-Lemonban-Media-Type': 'lemonban.v2',
-    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJfaWQiOjIwMjc0NCwiZXhwIjoxNjA1MDE3NzU5fQ.npZr4Z-GjmpBKBYWplyUqQFM7WKYRc-2NVrZBpi3PCNFzTyCfJMBptD5pOfGCSya6BTvoJwZdvniFPXLY2-E0g'
-}
+@log_info
+def add(a, b):
+    return a + b
 
-response = requests.request("POST", url, headers=headers, json=payload)
 
-print(response.text)
+# add(1, 2)
+from datetime import datetime
+print(":{=^50}".format('dasd'))

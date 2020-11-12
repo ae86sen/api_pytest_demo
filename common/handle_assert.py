@@ -12,7 +12,7 @@ class HandleAssert:
             return True
         except Exception as e:
             logger.error(f"eq断言失败，预期结果：{ex}，实际结果：{re}")
-            # logger.exception(f'发生的错误为：{e}')
+            logger.error("用例失败！")
             raise e
 
     @staticmethod

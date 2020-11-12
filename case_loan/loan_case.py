@@ -11,9 +11,11 @@ from api_loan.loan_api import LoanApi
 from common.handle_mysql import HandleMysql
 from api_member.member_api import MemberApi
 from jsonpath import jsonpath
+from common.wrapper import log_info
 
 
 class LoanCase(LoanApi):
+    @log_info
     @allure.step('step:调用业务api-添加项目')
     def case_add_loan(self, data, login_data, db: HandleMysql = None):
         # 替换数据
@@ -30,6 +32,7 @@ class LoanCase(LoanApi):
             res = add_loan_response.json()
         return res
 
+    @log_info
     @allure.step('step:调用业务api-审核')
     def case_audit(self, data, login_data, db: HandleMysql = None):
         data = self.template(data, {'member_id': login_data['member_id']})
@@ -47,6 +50,7 @@ class LoanCase(LoanApi):
             audit_res['status'] = status
         return audit_res
 
+    @log_info
     @allure.step('step:调用业务api-投资')
     def case_invest(self, data, login_data, db: HandleMysql = None):
 

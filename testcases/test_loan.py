@@ -31,11 +31,11 @@ class TestLoan(LoanCase):
         login_data = get_login_data
         db = connect_mysql
         result = self.case_add_loan(data, login_data, db)
-        logger.info(f'响应结果:{result}')
         HA().eq(data['expected']['code'], result['code'])
         HA().eq(data['expected']['msg'], result['msg'])
         if data['sql']:
             HA().eq(1, result['add_num'])
+        logger.info('用例通过！')
 
     @allure.story('审核项目')
     @allure.title('{data[title]}')
@@ -43,17 +43,15 @@ class TestLoan(LoanCase):
     @pytest.mark.parametrize('connect_mysql', [conf_data['mysql']], indirect=True)
     @pytest.mark.parametrize('data', datas['audit'])
     def test_audit(self, data, get_login_data, connect_mysql):
-        # allure.dynamic.description(f'测试数据为：{data["add_loan_json"]}\n'
-        #                            f'测试步骤：\n1、管理员登录-加标-审核\n'
-        #                            f'2、投资人登录-投资')
+
         login_data = get_login_data
         db = connect_mysql
         result = self.case_audit(data, login_data, db)
-        logger.info(f'响应结果:{result}')
         HA().eq(data['expected']['code'], result['code'])
         HA().eq(data['expected']['msg'], result['msg'])
         if data['sql']:
             HA().eq(data['expected']['status'], result['status'])
+        logger.info('用例通过！')
 
     @allure.story('投资项目')
     @allure.title('{data[title]}')
@@ -64,10 +62,10 @@ class TestLoan(LoanCase):
         login_data = get_login_data
         db = connect_mysql
         result = self.case_invest(data, login_data, db)
-        logger.info(f'响应结果:{result}')
         HA().eq(data['expected']['code'], result['code'])
         HA().eq(data['expected']['msg'], result['msg'])
         HA().eq(self.to_two_decimal(data['invest_json']['amount']), result['invest_amount'])
         if data['check_sql']:
             HA().eq(1, result['invest_num'])
             HA().eq(1, result['financeLog_num'])
+        logger.info('用例通过！')

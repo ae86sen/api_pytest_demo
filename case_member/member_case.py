@@ -1,13 +1,15 @@
 from decimal import Decimal
 
+import allure
 from loguru import logger
-
+from common.wrapper import log_info
 from api_member.member_api import MemberApi
 from common.handle_mysql import HandleMysql
 
 
 class MemberCase(MemberApi):
-
+    @log_info
+    @allure.step('step:调用业务api-注册')
     def case_register(self, data):
         """
         注册业务场景
@@ -18,6 +20,8 @@ class MemberCase(MemberApi):
         res = self.register_api(**data).json()
         return res
 
+    @log_info
+    @allure.step('step:调用业务api-充值')
     def case_recharge(self, data, login_data, db: HandleMysql):
         """
         账户充值业务场景
@@ -52,6 +56,8 @@ class MemberCase(MemberApi):
             res = recharge_response.json()
         return res
 
+    @log_info
+    @allure.step('step:调用业务api-提现')
     def case_withdraw(self, data, login_data, db: HandleMysql):
         """
         账户提现业务场景

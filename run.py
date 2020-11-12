@@ -8,7 +8,10 @@ E-mail:369799130@qq.com
 import os
 
 import pytest
+from loguru import logger
 
-pytest.main(['-m', 'zls', '-s', r"--alluredir=report/json", "--clean-alluredir"])
+logger.add('./log/{time}.log', rotation='20 MB', retention='1 week', encoding='utf-8')
+
+pytest.main(['-s', r"--alluredir=report/json", "--clean-alluredir"])
 os.system('allure generate ./report/json -o ./report/html -c')
 # pytest.main(['-s'])

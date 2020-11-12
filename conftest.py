@@ -8,6 +8,8 @@ E-mail:369799130@qq.com
 import pytest
 import requests
 import jsonpath
+from loguru import logger
+
 from api_member.member_api import MemberApi
 from common.handle_mysql import HandleMysql
 
@@ -27,19 +29,15 @@ def connect_mysql(request):
     db.close()
 
 
-# @pytest.fixture(scope='class')
-# def get_login_data():
-#     response = ma.login_api()
-#     return response
+@pytest.fixture(scope='session', autouse=True)
+def task_mark():
+    logger.debug("{:=^50}".format('测试任务开始'))
+    yield
+    logger.debug("{:=^50}".format('测试任务结束'))
 
-#
-# print(get_login_data().json())
-# s = {"host": 'api.lemonban.com',
-#      "user": "future",
-#      "password": '123456',
-#      "port": 3306}
-#
-# db = HandleMysql(**s)
-# print(db)
-# x = db.count("SELECT * FROM  futureloan.loan WHERE member_id=202744;")
-# print(x,type(x))
+
+@pytest.fixture(autouse=True)
+def case_mark():
+    logger.debug("{:=^50}".format('用例开始'))
+    yield
+    logger.debug("{:=^50}".format('用例结束'))
