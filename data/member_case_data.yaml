@@ -198,7 +198,7 @@ withdraw:
 
   - 'title': '验证提现金额为50万提现成功'
     'member_id': '$member_id'
-    'amount': 500000.1
+    'amount': 500000
     'expected': {"code": 0,"msg": "OK"}
     'sql': 'SELECT leave_amount FROM futureloan.member WHERE mobile_phone="$mobile_phone"'
 

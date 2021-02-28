@@ -8,15 +8,17 @@ E-mail:369799130@qq.com
 from loguru import logger
 
 
-def log_info(func):
+def api_call(func):
     """
-    日志装饰器，简单记录函数输入输出
+    接口调用记录
     :param func: 装饰的函数
     :return:
     """
+
     def inner(*args, **kwargs):
+        logger.info(f"开始调用接口：{func.__name__}")
         res = func(*args, **kwargs)
-        logger.info(f'\n调用函数:{func.__name__},\n传入参数：{args, kwargs},\n响应结果：{res}')
+        logger.info(f"结束调用接口：{func.__name__}")
         return res
 
     return inner

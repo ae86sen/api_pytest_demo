@@ -11,16 +11,12 @@ import allure
 from jsonpath import jsonpath
 
 from common.base_api import BaseApi
-from common.handle_path import CONF_DIR
-
-# conf_path = os.path.join(CONF_DIR, 'config.yaml')
+from common.wrapper import api_call
 
 
 class MemberApi(BaseApi):
-    # conf_data = BaseApi().get_yaml(conf_path)
-    # host = conf_data['env']['host']
-    # headers = conf_data['request_headers']['headers']
 
+    @api_call
     def login_api(self, user=BaseApi().account['user'], pwd=BaseApi().account['pwd']):
         """
         登录接口
@@ -56,6 +52,7 @@ class MemberApi(BaseApi):
         login_data['reg_name'] = jsonpath(res, '$..reg_name')[0]
         return login_data
 
+    @api_call
     def register_api(self, mobile_phone: str, pwd: str, member_type: int, reg_name=None):
         """
         注册接口
@@ -82,6 +79,7 @@ class MemberApi(BaseApi):
         response = self.send_http(data)
         return response
 
+    @api_call
     def recharge_api(self, member_id: int, amount: float, token):
         """
         账户充值接口
@@ -104,6 +102,7 @@ class MemberApi(BaseApi):
         response = self.send_http(data)
         return response
 
+    @api_call
     def withdraw_api(self, member_id: int, amount: float, token):
         """
         账户提现接口
@@ -127,6 +126,7 @@ class MemberApi(BaseApi):
         response = self.send_http(data)
         return response
 
+    @api_call
     def info_update_api(self, member_id: int, reg_name: str, token):
         """
         用户信息更新接口
@@ -150,6 +150,7 @@ class MemberApi(BaseApi):
         response = self.send_http(data)
         return response
 
+    @api_call
     def get_user_info_api(self, member_id, token):
         """
         获取单个用户信息接口
@@ -162,7 +163,6 @@ class MemberApi(BaseApi):
             'method': 'get',
             'headers': self.headers,
         }
-        # data['headers'].update({'Authorization': token})
         self.headers['Authorization'] = token
         response = self.send_http(data)
         return response

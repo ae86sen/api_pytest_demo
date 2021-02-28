@@ -5,19 +5,17 @@ Time:2020/11/10
 E-mail:369799130@qq.com
 ============================
 """
-from loguru import logger
 import allure
-from api_loan.loan_api import LoanApi
+from apis.api_loan.loan_api import LoanApi
 from common.handle_mysql import HandleMysql
-from api_member.member_api import MemberApi
+from apis.api_member.member_api import MemberApi
 from jsonpath import jsonpath
-from common.wrapper import log_info
 
 
 class LoanCase(LoanApi):
-    @log_info
     @allure.step('step:调用业务api-添加项目')
     def case_add_loan(self, data, login_data, db: HandleMysql = None):
+        """加标业务"""
         # 替换数据
         data = self.template(data, {'member_id': login_data['member_id']})
         if data['sql']:
@@ -32,9 +30,9 @@ class LoanCase(LoanApi):
             res = add_loan_response.json()
         return res
 
-    @log_info
     @allure.step('step:调用业务api-审核')
     def case_audit(self, data, login_data, db: HandleMysql = None):
+        """审核业务"""
         data = self.template(data, {'member_id': login_data['member_id']})
         # 添加项目
         add_loan_res = self.add_loan_api(**data['add_loan_json'], token=login_data['token']).json()
@@ -50,10 +48,9 @@ class LoanCase(LoanApi):
             audit_res['status'] = status
         return audit_res
 
-    @log_info
     @allure.step('step:调用业务api-投资')
     def case_invest(self, data, login_data, db: HandleMysql = None):
-
+        """投资业务"""
         member = MemberApi()
         # 管理员登录-加标-审核
         audit_res = self.case_audit(data, login_data)

@@ -17,6 +17,11 @@ from loguru import logger
 class Utils:
     @classmethod
     def handle_yaml(cls, file_name):
+        """
+        读取yaml文件
+        :param file_name:
+        :return:
+        """
         try:
             yaml_data = yaml.safe_load(open(file_name, encoding='utf-8'))
         except Exception as e:
@@ -27,6 +32,11 @@ class Utils:
 
     @classmethod
     def handle_token(cls, response):
+        """
+        组装token
+        :param response:
+        :return:
+        """
         token_type = jsonpath(response.json(), '$..token_type')[0]
         token_value = jsonpath(response.json(), '$..token')[0]
         token = f'{token_type} {token_value}'
@@ -34,9 +44,12 @@ class Utils:
 
     @classmethod
     def handle_template(cls, source_data, replace_data: dict, ):
-        # with open(file_path, encoding='utf-8') as f:
-        #     res = Template(f.read()).safe_substitute(**replace_data)
-        #     return yaml.safe_load(res)
+        """
+        替换文本变量
+        :param source_data:
+        :param replace_data:
+        :return:
+        """
         res = Template(str(source_data)).safe_substitute(**replace_data)
         return yaml.safe_load(res)
 
@@ -52,6 +65,10 @@ class Utils:
 
     @classmethod
     def handle_random_phone(cls):
+        """
+        生成随机手机号
+        :return:
+        """
         fake = Faker(locale='zh_CN')
         phone_number = fake.phone_number()
         return phone_number

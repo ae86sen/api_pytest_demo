@@ -8,20 +8,14 @@ E-mail:369799130@qq.com
 import os
 
 import allure
-from jsonpath import jsonpath
 
 from common.base_api import BaseApi
-from common.handle_path import CONF_DIR
-
-
-# conf_path = os.path.join(CONF_DIR, 'config.yaml')
+from common.wrapper import api_call
 
 
 class LoanApi(BaseApi):
-    # conf_data = BaseApi().get_yaml(conf_path)
-    # host = conf_data['env']['host']
-    # headers = conf_data['request_headers']['headers']
 
+    @api_call
     @allure.step('调用添加项目接口')
     def add_loan_api(self, member_id: int, title, amount, loan_rate, loan_term: int,
                      loan_date_type: int, bidding_days: int, token):
@@ -57,6 +51,8 @@ class LoanApi(BaseApi):
         response = self.send_http(data)
         return response
 
+    @api_call
+    @allure.step('调用添加项目接口')
     def audit_loan_api(self, loan_id: int, approval_result: bool):
         """
         项目审核接口
@@ -77,6 +73,7 @@ class LoanApi(BaseApi):
         response = self.send_http(data)
         return response
 
+    @api_call
     @allure.step('step:调用投资api')
     def invest_loan_api(self, member_id, loan_id, amount, token):
         api = self.conf_data['member_api']['invest']
@@ -95,7 +92,12 @@ class LoanApi(BaseApi):
         response = self.send_http(data)
         return response
 
+    @api_call
     def loan_list_api(self):
+        """
+        获取项目列表
+        :return:
+        """
         api = self.conf_data['loan_api']['loan_list']
         data = {
             'url': self.host + api,

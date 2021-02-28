@@ -2,13 +2,12 @@ from decimal import Decimal
 
 import allure
 from loguru import logger
-from common.wrapper import log_info
-from api_member.member_api import MemberApi
+
+from apis.api_member.member_api import MemberApi
 from common.handle_mysql import HandleMysql
 
 
 class MemberCase(MemberApi):
-    @log_info
     @allure.step('step:调用业务api-注册')
     def case_register(self, data):
         """
@@ -20,7 +19,6 @@ class MemberCase(MemberApi):
         res = self.register_api(**data).json()
         return res
 
-    @log_info
     @allure.step('step:调用业务api-充值')
     def case_recharge(self, data, login_data, db: HandleMysql):
         """
@@ -56,7 +54,6 @@ class MemberCase(MemberApi):
             res = recharge_response.json()
         return res
 
-    @log_info
     @allure.step('step:调用业务api-提现')
     def case_withdraw(self, data, login_data, db: HandleMysql):
         """
@@ -69,23 +66,14 @@ class MemberCase(MemberApi):
         # 替换数据
         data = self.template(data, {'member_id': login_data['member_id'],
                                     'mobile_phone': login_data['mobile_phone']})
-        # logger.info(f'替换后的数据:{data}')
         if data['sql']:
             # 充值前账户余额
-            try:
-                before_balance: Decimal = db.get_one(data['sql'])[0]
-            except Exception as e:
-                logger.error('报错了')
-                logger.exception(e)
-                raise e
-            # logger.info(f'充值前账户余额：{before_balance}')
+            before_balance: Decimal = db.get_one(data['sql'])[0]
             withdraw_response = self.withdraw_api(data['member_id'], data['amount'], login_data['token'])
             res = withdraw_response.json()
             # 充值后账户余额
             after_balance: Decimal = db.get_one(data['sql'])[0]
-            # logger.info(f'充值后账户余额：{after_balance}')
             withdraw: Decimal = before_balance - after_balance
-            # logger.info(f'提现后，数据库金额变化差值：{withdraw}')
             res['withdraw'] = withdraw
         else:
             recharge_response = self.recharge_api(data['member_id'], data['amount'], login_data['token'])

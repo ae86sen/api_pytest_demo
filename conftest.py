@@ -6,24 +6,24 @@ E-mail:369799130@qq.com
 ============================
 """
 import pytest
-import requests
-import jsonpath
 from loguru import logger
 
-from api_member.member_api import MemberApi
+from apis.api_member.member_api import MemberApi
 from common.handle_mysql import HandleMysql
 
-ma = MemberApi()
+# ma = MemberApi()
 
 
 @pytest.fixture(scope='class')
 def get_login_data():
+    """获取登录数据"""
     data = MemberApi().get_login_data()
     return data
 
 
 @pytest.fixture(scope='class')
 def connect_mysql(request):
+    """连接数据库"""
     db = HandleMysql(**request.param)
     yield db
     db.close()
